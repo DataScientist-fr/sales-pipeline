@@ -1,0 +1,33 @@
+# Environnement Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Secrets
+.env
+
+# Données générées
+data/processed/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+
+# macOS
+.DS_Store
+
+# Tests
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Ruff / Black
+.ruff_cache/
