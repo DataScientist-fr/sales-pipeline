@@ -3,10 +3,10 @@ Interface Streamlit du pipeline sales.
 Permet de lancer le pipeline et visualiser le résultat.
 """
 
-import io
 import logging
 import os
 import sys
+
 import pandas as pd
 import streamlit as st
 
@@ -48,7 +48,9 @@ if st.button("▶️ Lancer le pipeline", type="primary", use_container_width=Tr
             log_output.code("\n".join(log_lines), language=None)
 
     handler = StreamlitHandler()
-    handler.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(name)s - %(message)s", datefmt="%H:%M:%S"))
+    handler.setFormatter(
+        logging.Formatter("%(asctime)s [%(levelname)s] %(name)s - %(message)s", datefmt="%H:%M:%S")
+    )
 
     root_logger = logging.getLogger()
     root_logger.addHandler(handler)
@@ -56,6 +58,7 @@ if st.button("▶️ Lancer le pipeline", type="primary", use_container_width=Tr
 
     try:
         from run_pipeline import run
+
         output_file = run()
         st.success(f"✅ Pipeline terminé — {output_file}")
 
