@@ -3,7 +3,7 @@ Orchestrateur du pipeline : ingestion → transformation → export.
 """
 
 import os
-import pandas as pd
+
 from pipeline import ingest, transform
 from pipeline.utils import get_logger, get_output_path
 

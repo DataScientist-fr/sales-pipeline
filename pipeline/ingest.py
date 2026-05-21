@@ -3,13 +3,23 @@ Ingestion : lecture et validation des fichiers CSV bruts.
 """
 
 import os
+
 import pandas as pd
-from pipeline.utils import get_logger, get_data_path
+
+from pipeline.utils import get_data_path, get_logger
 
 logger = get_logger(__name__)
 
 EXPECTED_COLUMNS = {
-    "orders": ["order_id", "customer_id", "product_id", "quantity", "unit_price", "order_date", "status"],
+    "orders": [
+        "order_id",
+        "customer_id",
+        "product_id",
+        "quantity",
+        "unit_price",
+        "order_date",
+        "status",
+    ],
     "customers": ["customer_id", "name", "email", "country"],
     "products": ["product_id", "product_name", "category"],
 }

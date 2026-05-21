@@ -3,13 +3,13 @@ Tests unitaires pour pipeline/transform.py
 """
 
 import pandas as pd
-import pytest
+
 from pipeline.transform import (
-    remove_duplicates,
-    remove_negative_prices,
-    fill_missing_status,
     compute_total_price,
     enrich,
+    fill_missing_status,
+    remove_duplicates,
+    remove_negative_prices,
 )
 
 

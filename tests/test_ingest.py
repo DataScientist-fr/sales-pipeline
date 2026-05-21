@@ -2,10 +2,11 @@
 Tests unitaires pour pipeline/ingest.py
 """
 
-import os
-import pytest
-import pandas as pd
 from unittest.mock import patch
+
+import pandas as pd
+import pytest
+
 from pipeline.ingest import load_csv
 
 

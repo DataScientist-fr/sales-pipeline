@@ -3,6 +3,7 @@ Transformation : nettoyage des données et enrichissement.
 """
 
 import pandas as pd
+
 from pipeline.utils import get_logger
 
 logger = get_logger(__name__)

@@ -3,16 +3,17 @@ Script de génération de données fictives pour le projet sales-pipeline.
 Utilise Faker pour produire des CSV réalistes avec quelques problèmes intentionnels.
 """
 
-import random
-from datetime import datetime, timedelta
 import csv
 import os
+import random
+from datetime import datetime, timedelta
 
 random.seed(42)
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def random_date(start_year=2023, end_year=2024):
     start = datetime(start_year, 1, 1)
@@ -29,12 +30,14 @@ COUNTRIES = ["France", "Germany", "Spain", "Italy", "Belgium", "Netherlands"]
 
 CUSTOMERS = []
 for i in range(1, 51):
-    CUSTOMERS.append({
-        "customer_id": f"C{i:03d}",
-        "name": f"Customer {i}",
-        "email": f"customer{i}@example.com",
-        "country": random.choice(COUNTRIES),
-    })
+    CUSTOMERS.append(
+        {
+            "customer_id": f"C{i:03d}",
+            "name": f"Customer {i}",
+            "email": f"customer{i}@example.com",
+            "country": random.choice(COUNTRIES),
+        }
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -45,11 +48,13 @@ CATEGORIES = ["Electronics", "Office", "Furniture", "Software", "Accessories"]
 
 PRODUCTS = []
 for i in range(1, 21):
-    PRODUCTS.append({
-        "product_id": f"P{i:03d}",
-        "product_name": f"Product {i}",
-        "category": random.choice(CATEGORIES),
-    })
+    PRODUCTS.append(
+        {
+            "product_id": f"P{i:03d}",
+            "product_name": f"Product {i}",
+            "category": random.choice(CATEGORIES),
+        }
+    )
 
 
 # ---------------------------------------------------------------------------
