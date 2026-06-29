@@ -26,6 +26,7 @@ def remove_negative_prices(df: pd.DataFrame) -> pd.DataFrame:
     logger.info(f"Lignes avec prix invalide supprimées : {removed}")
     return df
 
+
 def remove_invalid_quantity(df: pd.DataFrame) -> pd.DataFrame:
     """Supprime les lignes avec une quantity négative ou nulle."""
     before = len(df)
@@ -58,6 +59,12 @@ def strip_whitespace(df, columns):
     return df
 
 
+def normalize_emails(df):
+    if "email" in df.columns:
+        df["email"] = df["email"].str.strip().str.lower()
+    return df
+
+
 def enrich(
     orders: pd.DataFrame,
     customers: pd.DataFrame,
@@ -82,14 +89,8 @@ def run(
     df = remove_invalid_quantity(df)
     df = fill_missing_status(df)
     df = compute_total_price(df)
-
     customers = strip_whitespace(customers, ["name"])
+    customers = normalize_emails(customers)
     df = enrich(df, customers, products)
     logger.info(f"Transformations terminées — {len(df)} lignes en sortie.")
-    return df
-    import pandas as pd
-
-def normalize_emails(df):
-    if 'email' in df.columns:
-        df['email'] = df['email'].str.strip().str.lower()
     return df
