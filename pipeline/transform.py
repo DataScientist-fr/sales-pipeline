@@ -70,3 +70,9 @@ def run(
     df = enrich(df, customers, products)
     logger.info(f"Transformations terminées — {len(df)} lignes en sortie.")
     return df
+    import pandas as pd
+
+def normalize_emails(df):
+    if 'email' in df.columns:
+        df['email'] = df['email'].str.strip().str.lower()
+    return df
