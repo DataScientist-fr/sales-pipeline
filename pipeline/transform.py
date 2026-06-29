@@ -26,6 +26,14 @@ def remove_negative_prices(df: pd.DataFrame) -> pd.DataFrame:
     logger.info(f"Lignes avec prix invalide supprimées : {removed}")
     return df
 
+def remove_invalid_quantity(df: pd.DataFrame) -> pd.DataFrame:
+    """Supprime les lignes avec une quantity négative ou nulle."""
+    before = len(df)
+    df = df[df["quantity"] > 0]
+    removed = before - len(df)
+    logger.info(f"Lignes avec quantité invalide supprimées : {removed}")
+    return df
+
 
 def fill_missing_status(df: pd.DataFrame, default: str = "unknown") -> pd.DataFrame:
     """Remplace les valeurs manquantes dans status par une valeur par défaut."""
@@ -41,6 +49,12 @@ def compute_total_price(df: pd.DataFrame) -> pd.DataFrame:
     df["total_price"] = df["quantity"] * df["unit_price"]
     df["total_price"] = df["total_price"].round(2)
     logger.info("Colonne total_price calculée.")
+    return df
+
+
+def strip_whitespace(df, columns):
+    for column in columns:
+        df[column] = df[column].str.strip()
     return df
 
 
@@ -65,8 +79,11 @@ def run(
     logger.info("Démarrage des transformations...")
     df = remove_duplicates(orders)
     df = remove_negative_prices(df)
+    df = remove_invalid_quantity(df)
     df = fill_missing_status(df)
     df = compute_total_price(df)
+
+    customers = strip_whitespace(customers, ["name"])
     df = enrich(df, customers, products)
     logger.info(f"Transformations terminées — {len(df)} lignes en sortie.")
     return df
