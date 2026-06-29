@@ -10,6 +10,7 @@ from pipeline.transform import (
     fill_missing_status,
     remove_duplicates,
     remove_negative_prices,
+    strip_whitespace,
 )
 
 
@@ -51,6 +52,13 @@ def test_enrich_adds_customer_columns(sample_orders, sample_customers, sample_pr
     result = enrich(sample_orders, sample_customers, sample_products)
     assert "name" in result.columns
     assert "country" in result.columns
+
+
+def test_strip_whitespace(sample_customers):
+    result = strip_whitespace(sample_customers, ["name"])
+    for i in result["name"]:
+        assert not i.startswith(" ")
+        assert not i.endswith(" ")
 
 
 def test_enrich_adds_product_columns(sample_orders, sample_customers, sample_products):

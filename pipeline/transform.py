@@ -44,6 +44,12 @@ def compute_total_price(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def strip_whitespace(df, columns):
+    for column in columns:
+        df[column] = df[column].str.strip()
+    return df
+
+
 def enrich(
     orders: pd.DataFrame,
     customers: pd.DataFrame,
@@ -67,6 +73,8 @@ def run(
     df = remove_negative_prices(df)
     df = fill_missing_status(df)
     df = compute_total_price(df)
+
+    customers = strip_whitespace(customers, ["name"])
     df = enrich(df, customers, products)
     logger.info(f"Transformations terminées — {len(df)} lignes en sortie.")
     return df
