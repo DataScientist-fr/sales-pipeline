@@ -8,8 +8,11 @@ from pipeline.transform import (
     compute_total_price,
     enrich,
     fill_missing_status,
+    normalize_emails,
     remove_duplicates,
+    remove_invalid_quantity,
     remove_negative_prices,
+    strip_whitespace,
 )
 
 
@@ -53,7 +56,38 @@ def test_enrich_adds_customer_columns(sample_orders, sample_customers, sample_pr
     assert "country" in result.columns
 
 
+def test_strip_whitespace(sample_customers):
+    result = strip_whitespace(sample_customers, ["name"])
+    for i in result["name"]:
+        assert not i.startswith(" ")
+        assert not i.endswith(" ")
+
+
 def test_enrich_adds_product_columns(sample_orders, sample_customers, sample_products):
     result = enrich(sample_orders, sample_customers, sample_products)
     assert "product_name" in result.columns
     assert "category" in result.columns
+
+
+def test_remove_invalid_quantity_keeps_only_positive_quantities():
+    df = pd.DataFrame(
+        {
+            "order_id": [1, 2, 3, 4, 5],
+            "quantity": [2, 0, -1, 5, -3],
+            "unit_price": [10, 20, 30, 40, 50],
+        }
+    )
+
+    result = remove_invalid_quantity(df)
+
+    assert len(result) == 2
+    assert result["quantity"].tolist() == [2, 5]
+    assert (result["quantity"] > 0).all()
+
+
+def test_normalize_emails():
+    data = {"id": [1, 2], "email": ["ALI@test.com", "moha@Ex.ma"]}
+    df = pd.DataFrame(data)
+    result_df = normalize_emails(df)
+    assert result_df.loc[0, "email"] == "ali@test.com"
+    assert result_df.loc[1, "email"] == "moha@ex.ma"
