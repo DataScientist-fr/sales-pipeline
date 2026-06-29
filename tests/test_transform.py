@@ -57,3 +57,16 @@ def test_enrich_adds_product_columns(sample_orders, sample_customers, sample_pro
     result = enrich(sample_orders, sample_customers, sample_products)
     assert "product_name" in result.columns
     assert "category" in result.columns
+
+def test_normalize_emails():
+    data = {
+        'id': [1, 2],
+        'email': [
+            'ALI@test.com',
+            'moha@Ex.ma'
+        ]
+    }
+    df = pd.DataFrame(data)
+    result_df = normalize_emails(df)
+    assert result_df.loc[0, 'email'] == 'ali@test.com'
+    assert result_df.loc[1, 'email'] == 'moha@ex.ma'
