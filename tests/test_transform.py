@@ -8,9 +8,10 @@ from pipeline.transform import (
     compute_total_price,
     enrich,
     fill_missing_status,
+    normalize_emails,
     remove_duplicates,
-    remove_negative_prices,
     remove_invalid_quantity,
+    remove_negative_prices,
     strip_whitespace,
 )
 
@@ -82,3 +83,11 @@ def test_remove_invalid_quantity_keeps_only_positive_quantities():
     assert len(result) == 2
     assert result["quantity"].tolist() == [2, 5]
     assert (result["quantity"] > 0).all()
+
+
+def test_normalize_emails():
+    data = {"id": [1, 2], "email": ["ALI@test.com", "moha@Ex.ma"]}
+    df = pd.DataFrame(data)
+    result_df = normalize_emails(df)
+    assert result_df.loc[0, "email"] == "ali@test.com"
+    assert result_df.loc[1, "email"] == "moha@ex.ma"
