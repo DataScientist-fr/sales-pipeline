@@ -10,6 +10,7 @@ from pipeline.transform import (
     fill_missing_status,
     remove_duplicates,
     remove_negative_prices,
+    remove_invalid_quantity,
     strip_whitespace,
 )
 
@@ -65,3 +66,19 @@ def test_enrich_adds_product_columns(sample_orders, sample_customers, sample_pro
     result = enrich(sample_orders, sample_customers, sample_products)
     assert "product_name" in result.columns
     assert "category" in result.columns
+
+
+def test_remove_invalid_quantity_keeps_only_positive_quantities():
+    df = pd.DataFrame(
+        {
+            "order_id": [1, 2, 3, 4, 5],
+            "quantity": [2, 0, -1, 5, -3],
+            "unit_price": [10, 20, 30, 40, 50],
+        }
+    )
+
+    result = remove_invalid_quantity(df)
+
+    assert len(result) == 2
+    assert result["quantity"].tolist() == [2, 5]
+    assert (result["quantity"] > 0).all()
