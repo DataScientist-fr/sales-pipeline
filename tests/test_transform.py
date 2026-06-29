@@ -8,6 +8,7 @@ from pipeline.transform import (
     compute_total_price,
     enrich,
     fill_missing_status,
+    normalize_emails,
     remove_duplicates,
     remove_negative_prices,
 )
@@ -58,15 +59,13 @@ def test_enrich_adds_product_columns(sample_orders, sample_customers, sample_pro
     assert "product_name" in result.columns
     assert "category" in result.columns
 
+
 def test_normalize_emails():
-    data = {
-        'id': [1, 2],
-        'email': [
-            'ALI@test.com',
-            'moha@Ex.ma'
-        ]
-    }
+
+    data = {"id": [1, 2], "email": ["ALI@test.com", "moha@Ex.ma"]}
+
     df = pd.DataFrame(data)
-    result_df = normalize_emails(df)
-    assert result_df.loc[0, 'email'] == 'ali@test.com'
-    assert result_df.loc[1, 'email'] == 'moha@ex.ma'
+    result = normalize_emails(df)
+
+    assert result.loc[0, "email"] == "ali@test.com"
+    assert result.loc[1, "email"] == "moha@ex.ma"
