@@ -105,8 +105,18 @@ pytest
 
 Les données sont générées par `scripts/generate_data.py`. Elles simulent des exports de ventes avec des problèmes intentionnels :
 
-| Fichier | Lignes | Problèmes |
-|---|---|---|
-| `orders.csv` | ~210 | Doublons, prix négatifs, statuts manquants |
-| `customers.csv` | 50 | Aucun |
-| `products.csv` | 20 | Aucun |
+| Fichier | Lignes | Problème | Effectif | Tâche |
+|---|---|---|---|---|
+| `orders.csv` | 210 | Doublons sur `order_id` | 10 | — |
+| `orders.csv` | 210 | `unit_price` ≤ 0 | 5 | — |
+| `orders.csv` | 210 | `status` manquant (vide/NaN) | 8 | — |
+| `orders.csv` | 210 | `quantity` ≤ 0 | 5 | 3 |
+| `orders.csv` | 210 | `order_date` invalide (format incorrect) | 5 | 4 |
+| `orders.csv` | 210 | `status` en casse mixte (`Completed`, `PENDING`…) | 6 | 6 |
+| `orders.csv` | 210 | `customer_id` inexistant (`C999`) | 3 | 7 |
+| `orders.csv` | 210 | `product_id` inexistant (`P999`) | 2 | 7 |
+| `customers.csv` | 50 | `name` avec espaces en début/fin | 8 | 1 |
+| `customers.csv` | 50 | `email` en casse mixte | 8 | 2 |
+| `products.csv` | 20 | Aucun | — | — |
+
+Tous les défauts sur `orders.csv` portent sur des lignes **strictement disjointes**.
