@@ -20,6 +20,7 @@ data/processed/
 # VS Code
 .vscode/
 !.vscode/extensions.json
+*.code-workspace
 
 # macOS
 .DS_Store
