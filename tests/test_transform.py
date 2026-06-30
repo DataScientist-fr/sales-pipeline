@@ -9,6 +9,7 @@ from pipeline.transform import (
     enrich,
     fill_missing_status,
     normalize_emails,
+    parse_order_dates,
     remove_duplicates,
     remove_invalid_quantity,
     remove_negative_prices,
@@ -91,3 +92,11 @@ def test_normalize_emails():
     result_df = normalize_emails(df)
     assert result_df.loc[0, "email"] == "ali@test.com"
     assert result_df.loc[1, "email"] == "moha@ex.ma"
+
+def test_parse_order_dates():
+    data = { "order_id": [1, 2, 3, 4], "order_date": ["2023-01-01", "2023-02-30", "invalid_date", None], }
+    df = pd.DataFrame(data)
+    result_df = parse_order_dates(df)
+    # Vérifier que les dates valides sont converties correctement
+    assert pd.notna(result_df.loc[0, "order_date"])
+    assert result_df.loc[0, "order_date"] == pd.Timestamp("2023-01-01")
