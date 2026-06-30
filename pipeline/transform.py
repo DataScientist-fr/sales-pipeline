@@ -64,6 +64,18 @@ def normalize_emails(df):
         df["email"] = df["email"].str.strip().str.lower()
     return df
 
+def parse_order_dates(df):
+    if 'order_date' in df.columns:
+        missing_before = df['order_date'].isna().sum()
+        df['order_date'] = pd.to_datetime(df['order_date'], errors='coerce')
+        missing_after = df['order_date'].isna().sum()
+        invalid_dates_count = missing_after - missing_before
+        if invalid_dates_count > 0:
+            logger.warning(
+                f"[ETL - Transform] {invalid_dates_count} dates malformées ont été détectées "
+                f"dans 'order_date' et converties en NaT sans interrompre le pipeline."
+            )
+    return df
 
 def enrich(
     orders: pd.DataFrame,
