@@ -20,6 +20,9 @@ def run() -> str:
     # Transformation
     df_clean = transform.run(orders, customers, products)
 
+    #Convertir les dates de commande
+    df_clean = transform.parse_order_dates(df_clean)
+
     # Export
     output_path = get_output_path()
     output_file = os.path.join(output_path, "orders_clean.csv")
