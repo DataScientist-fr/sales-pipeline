@@ -2,8 +2,11 @@
 Tests unitaires pour pipeline/transform.py
 """
 
+import os
+
 import pandas as pd
 
+from pipeline.export import export_json
 from pipeline.transform import (
     compute_total_price,
     enrich,
@@ -91,3 +94,19 @@ def test_normalize_emails():
     result_df = normalize_emails(df)
     assert result_df.loc[0, "email"] == "ali@test.com"
     assert result_df.loc[1, "email"] == "moha@ex.ma"
+
+
+def test_export_json(tmp_path):
+    raw_data = {
+        'id': [1, 2, 3],
+        'customer_email': ['alice@example.com', 'bob@example.com', 'charlie@example.com']
+    }
+    df_origin = pd.DataFrame(raw_data)
+    target_path = tmp_path / "exports" / "cleaned_orders.json"
+    path_str = str(target_path)
+
+    export_json(df_origin, path_str)
+
+    assert os.path.exists(path_str)
+    df_reloaded = pd.read_json(path_str, orient="records")
+    pd.testing.assert_frame_equal(df_origin, df_reloaded)
